@@ -1,0 +1,8 @@
+{
+  "events": {
+    "start": "fuser -k 4000/tcp",
+    "restart": "fuser -k 4000/tcp",
+    "crash": "fuser -k 4000/tcp"
+  },
+  "delay": "6000"
+}
