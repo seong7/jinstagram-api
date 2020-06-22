@@ -1,4 +1,4 @@
-import mogoose, { Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 // schema 선언
 const UserSchema = new Schema( {
@@ -10,4 +10,4 @@ const UserSchema = new Schema( {
 
 // Model 생성
 const User = mongoose.model('User', UserSchema);
-export default user;
+export default User;
