@@ -1,0 +1,8 @@
+{
+  "name": "sns-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/seong7/sns-app-api",
+  "author": "Seongjin <seongjinkim1123@gmail.com>",
+  "license": "MIT"
+}
