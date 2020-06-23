@@ -1,6 +1,6 @@
 # SNS-app-api
 
-sns app 프로젝트의 api 입니다.
+AWS EC2 인스턴스로 운영되고 있는 sns app 프로젝트 API server 의 repo 입니다.
 
 ## Package List
 <table>
