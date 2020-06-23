@@ -7,7 +7,7 @@ sns app 프로젝트의 api 입니다.
   <thead>
     <tr>
       <th>Package</th>
-      <th>목적</th>
+      <th>Description</th>
     </tr>
   </thead>
   <tr>
