@@ -6,6 +6,7 @@ import bodyParser from 'koa-bodyparser';
 import mongoose from 'mongoose';
 
 import api from './api';
+import jwtMiddleware from './lib/jwtMiddleware';
 
 const { PORT, MONGO_URI } = process.env;
 const app = new Koa();
@@ -17,6 +18,7 @@ router.use('/api', api.routes());
 // 라우터 적용 전에 미들웨어 적용 (서버에 요청 시 무조건 실행됨)
 app.use(cors());
 app.use(bodyParser());
+app.use(jwtMiddleware);
 
 // 라우터 적용
 app.use(router.routes()).use(router.allowedMethods());

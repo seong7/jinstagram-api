@@ -75,7 +75,14 @@ export const login = async ctx => {
       ctx.status = 401;
       return;
     }
-    ctx.body = user.serialize();
+    ctx.body = user.serialize();  // hashed password 삭제해줌
+
+    const token = user.generateToken();
+    ctx.cookies.set('access_token', token, {
+      maxAge: 1000 * 60 * 24 * 7, // 7일 유효
+      httpOnly: true, // 보안 상 JavaScript 로 쿠키를 조회하지 못하도록 설정
+    })
+    console.log(token);
   } catch (e) {
     ctx.throw(500, e);
   }
