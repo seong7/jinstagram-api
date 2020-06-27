@@ -4,13 +4,13 @@ import jwt from 'jsonwebtoken';
 
 // schema 선언
 const UserSchema = new Schema( {
-  username: String,
+  userId: String,
   hashedPassword: String,
 });
 
 // method 생성
-UserSchema.statics.findByUsername = function (username) {
-  return this.findOne({ username });       // static method 에서 this 는 model (User) 를 가리킨다.
+UserSchema.statics.findByUserId = function (userId) {
+  return this.findOne({ userId });       // static method 에서 this 는 model (User) 를 가리킨다.
 }
 
 UserSchema.methods.setPassword = async function(password) {
@@ -31,7 +31,7 @@ UserSchema.methods.generateToken = function() {
   const token = jwt.sign(
     {
       _id: this.id,
-      username: this.username,
+      userId: this.userId,
     },
     process.env.JWT_SECRET,
     {

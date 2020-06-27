@@ -1,21 +1,17 @@
-import Joi from '@hapi/joi';
-import User from '../../models/user';
+import Joi from "@hapi/joi";
+import User from "../../models/user";
 
 /* 
   POST /api/auth/register
   {
-    username: 'seongjin',
+    userId: 'seongjin',
     password: '123'
   }
 */
-export const register = async ctx => {
+export const register = async (ctx) => {
   const schema = Joi.object().keys({
-    username: Joi.string()
-      .alphanum()
-      .min(3)
-      .max(20)
-      .required(),
-      password: Joi.string().required(),
+    userId: Joi.string().alphanum().min(3).max(20).required(),
+    password: Joi.string().required(),
   });
   const result = schema.validate(ctx.request.body); // 위에서 만든 틀에 맞춰 검증
   if (result.error) {
@@ -24,18 +20,18 @@ export const register = async ctx => {
     return;
   }
 
-  const { username, password } = ctx.request.body;
+  const { userId, password } = ctx.request.body;
   try {
-    // username 이 이미 존재하는지 확인 (중복 확인)
-    const exists = await User.findByUsername(username); // Model 의 스태틱 메서드 사용
+    // userId 이 이미 존재하는지 확인 (중복 확인)
+    const exists = await User.findByUserId(userId); // Model 의 스태틱 메서드 사용
     if (exists) {
       ctx.status = 409; // Conflict
       return;
     }
 
     const user = new User({
-      username,
-    })
+      userId,
+    });
     await user.setPassword(password); // 비밀번호 설정    // Model 의 인스턴스 메서드 사용
     await user.save(); // DB에 저장
 
@@ -43,57 +39,58 @@ export const register = async ctx => {
     const data = user.toJSON();
     delete data.hasedPassword;
     ctx.body = data;
-
   } catch (e) {
     ctx.throw(500, e);
   }
-}
+};
 
 /*
   POST /api/auth/login
   {
-    username: 'seongjin',
+    userId: 'seongjin',
     password: '123'
   }
 */
-export const login = async ctx => {
-  const { username, password } = ctx.request.body;
+export const login = async (ctx) => {
+  const { userId, password } = ctx.request.body;
+  // console.log(userId);
+  // console.log(password);
 
-  if(!username || !password) {
-    ctx.status = 401 // Unauthorized
+  if (!userId || !password) {
+    ctx.status = 401; // Unauthorized
     return;
   }
 
   try {
-    const user = await User.findByUsername(username);
-    if(!user) {
+    const user = await User.findByUserId(userId);
+    if (!user) {
       ctx.status = 401;
       return;
     }
     const isValid = await user.checkPassword(password);
-    if(!isValid) {
+    if (!isValid) {
       ctx.status = 401;
       return;
     }
-    ctx.body = user.serialize();  // hashed password 삭제해줌
+    ctx.body = user.serialize(); // hashed password 삭제해줌
 
     const token = user.generateToken();
-    ctx.cookies.set('access_token', token, {
+    ctx.cookies.set("access_token", token, {
       maxAge: 1000 * 60 * 24 * 7, // 7일 유효
       httpOnly: true, // 보안 상 JavaScript 로 쿠키를 조회하지 못하도록 설정
-    })
+    });
     console.log(token);
   } catch (e) {
     ctx.throw(500, e);
   }
-}
+};
 
 /* 
   GET /api/auth/check
 */
-export const check  = async ctx => {}
+export const check = async (ctx) => {};
 
 /* 
   POST /api/auth/logout
 */
-export const logout = async ctx => {}
+export const logout = async (ctx) => {};
