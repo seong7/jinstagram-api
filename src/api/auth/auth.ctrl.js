@@ -2,15 +2,15 @@ import Joi from "@hapi/joi";
 import User from "../../models/user";
 
 /* 
-  POST /api/auth/register
+  POST /api/auth/join
   {
     userId: 'seongjin',
     password: '123'
   }
 */
-export const register = async (ctx) => {
+export const join = async (ctx) => {
   const schema = Joi.object().keys({
-    userId: Joi.string().alphanum().min(3).max(20).required(),
+    userId: Joi.string().alphanum().min(2).max(20).required(),
     password: Joi.string().required(),
   });
   const result = schema.validate(ctx.request.body); // 위에서 만든 틀에 맞춰 검증
@@ -35,10 +35,7 @@ export const register = async (ctx) => {
     await user.setPassword(password); // 비밀번호 설정    // Model 의 인스턴스 메서드 사용
     await user.save(); // DB에 저장
 
-    // 응답할 데이터에서 hashedPassword 필드 제거
-    const data = user.toJSON();
-    delete data.hasedPassword;
-    ctx.body = data;
+    ctx.body = user.serialize(); // hashed password 삭제해줌
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -65,11 +62,13 @@ export const login = async (ctx) => {
     const user = await User.findByUserId(userId);
     if (!user) {
       ctx.status = 401;
+      ctx.body = "ID not found";
       return;
     }
     const isValid = await user.checkPassword(password);
     if (!isValid) {
       ctx.status = 401;
+      ctx.body = "Password not correct";
       return;
     }
     ctx.body = user.serialize(); // hashed password 삭제해줌
