@@ -26,6 +26,7 @@ export const join = async (ctx) => {
     const exists = await User.findByUserId(userId); // Model 의 스태틱 메서드 사용
     if (exists) {
       ctx.status = 409; // Conflict
+      ctx.body = "ID conflict";
       return;
     }
 
