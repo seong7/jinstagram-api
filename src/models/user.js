@@ -1,15 +1,16 @@
 import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 // schema 선언
 const UserSchema = new Schema( {
-  username: String,
+  userId: String,
   hashedPassword: String,
 });
 
 // method 생성
-UserSchema.statics.findByUsername = function (username) {
-  return this.findOne({ username });       // static method 에서 this 는 model (User) 를 가리킨다.
+UserSchema.statics.findByUserId = function (userId) {
+  return this.findOne({ userId });       // static method 에서 this 는 model (User) 를 가리킨다.
 }
 
 UserSchema.methods.setPassword = async function(password) {
@@ -24,6 +25,20 @@ UserSchema.methods.serialize = function() {
   const data = this.toJSON();
   delete data.hashedPassword;   // data 반환하기 전 hashedPassword 삭제 
   return data;
+}
+UserSchema.methods.generateToken = function() {
+  // token 생성해주는 함수
+  const token = jwt.sign(
+    {
+      _id: this.id,
+      userId: this.userId,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: '7d',
+    },
+  );
+  return token;
 }
 
 // Model 생성
