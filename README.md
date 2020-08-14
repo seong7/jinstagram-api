@@ -3,6 +3,7 @@
 AWS EC2 인스턴스로 운영되고 있는 sns app 프로젝트 API server 의 repo 입니다.
 
 ## Package List
+
 <table>
   <thead>
     <tr>
@@ -13,6 +14,10 @@ AWS EC2 인스턴스로 운영되고 있는 sns app 프로젝트 API server 의 
   <tr>
     <td>koa</td>
     <td>Nodejs Web-framework</td>
+  </tr>
+  <tr>
+    <td>@koa/cors</td>
+    <td>koa 로 구축한 server 의 cors 를 허용해주는 라이브러리</td>
   </tr>
   <tr>
     <td>koa-bodyparser</td>
