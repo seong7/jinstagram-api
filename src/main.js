@@ -1,19 +1,20 @@
-require('dotenv').config();
-import Koa from 'koa';
-import cors from '@koa/cors';
-import Router from 'koa-router';
-import bodyParser from 'koa-bodyparser';
-import mongoose from 'mongoose';
+require("dotenv").config({ path: "../.env" });
 
-import api from './api';
-import jwtMiddleware from './lib/jwtMiddleware';
+import Koa from "koa";
+import cors from "@koa/cors";
+import Router from "koa-router";
+import bodyParser from "koa-bodyparser";
+import mongoose from "mongoose";
+
+import api from "./api";
+import jwtMiddleware from "./lib/jwtMiddleware";
 
 const { PORT, MONGO_URI } = process.env;
 const app = new Koa();
 const router = new Router();
 
 // 라우터 설정
-router.use('/api', api.routes());
+router.use("/api", api.routes());
 
 // 라우터 적용 전에 미들웨어 적용 (서버에 요청 시 무조건 실행됨)
 app.use(cors());
@@ -31,7 +32,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log('Connect to MongoDB');
+    console.log("Connect to MongoDB");
   })
   .catch((e) => {
     console.error(e);
@@ -39,5 +40,5 @@ mongoose
 
 const port = PORT || 4000;
 app.listen(port, () => {
-  console.log('Listening to port %d', port);
+  console.log("Listening to port %d", port);
 });

@@ -37,6 +37,12 @@ export const join = async (ctx) => {
     await user.save(); // DB에 저장
 
     ctx.body = user.serialize(); // hashed password 삭제해줌
+
+    const token = user.generateToken();
+    ctx.cookies.set("access_token", token, {
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
+      httpOnly: true,
+    });
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -88,9 +94,22 @@ export const login = async (ctx) => {
 /* 
   GET /api/auth/check
 */
-export const check = async (ctx) => {};
+export const check = async (ctx) => {
+  console.log(ctx.cookies.get("access_token"));
+  const { user } = ctx.state;
+  if (!user) {
+    // 로그인 중이 아님
+    ctx.status = 401;
+    return;
+  }
+  // console.log(ctx);
+  ctx.body = user;
+};
 
 /* 
   POST /api/auth/logout
 */
-export const logout = async (ctx) => {};
+export const logout = async (ctx) => {
+  ctx.cookies.set("access_token");
+  ctx.status = 204; // No Content
+};
