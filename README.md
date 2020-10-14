@@ -1,6 +1,6 @@
-# Web Api Server
+# Jinstagram Api Server
 
-Web API Server 의 repository 입니다.
+Jinstagram 프로젝트의 API Server repository 입니다.
 
 Linux 환경의 AWS EC2 인스턴스에 배포되어 있습니다.
 
