@@ -1,6 +1,8 @@
-# SNS-app-api
+# Web Api Server
 
-AWS EC2 인스턴스로 운영되고 있는 sns app 프로젝트 API server 의 repo 입니다.
+Web API Server 의 repository 입니다.
+
+Linux 환경의 AWS EC2 인스턴스에 배포되어 있습니다.
 
 ## Package List
 
